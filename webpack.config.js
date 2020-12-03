@@ -1,3 +1,13 @@
+const webpack = require('webpack');
+const dotenv = require('dotenv');
+
+const env = dotenv.config().parsed;
+
+const envKeys = Object.keys(env).reduce((prev, next) => {
+  prev[`process.env.${next}`] = JSON.stringify(env[next]);
+  return prev;
+}, {});
+
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -22,6 +32,7 @@ const config = {
     hints: false,
   },
   plugins: [
+    new webpack.DefinePlugin(envKeys),
     // plugins we are using to help with compiling
     new HtmlWebpackPlugin({
       // used to add the JavaScript code to the HTML
